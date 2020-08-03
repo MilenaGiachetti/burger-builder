@@ -4,6 +4,10 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import axios from '../../axios-orders';
+import Spinner from '../../components/UI/Spinner/Spinner';
+//con minuscula porque no se usa con JSX
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 const INGREDIENT_PRICES = {
     salad: 1.5,
@@ -24,7 +28,8 @@ class BurgerBuilder extends Component {
         totalPrice: 50,
         //se vuelve true cuando hay almenos un ingrediente
         purchasable: false,
-        purchasing: false
+        purchasing: false,
+        loading: false
     }
 
     updatePurchaseState (ingredients) {
@@ -80,7 +85,32 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
-        alert('Continuaste');
+        //alert('Continuaste');
+        this.setState({loading: true});
+        const order = {
+            ingredients: this.state.ingredients,
+            //En una app real el precio deberia calcularse en el server porque desde aca podria manipularlo el usuario
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Milena G',
+                address: {
+                    street: 'Test 123',
+                    zipCode: '1322',
+                    country: 'Argentina'
+                },
+                email: 'test@test.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+        axios.post('/orders.json', order)
+            .then(response => {
+                console.log(response);
+                this.setState({ loading: false, purchasing: false });
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({ loading: false, purchasing: false });
+            });
     }
     
     render(){
@@ -92,13 +122,17 @@ class BurgerBuilder extends Component {
         }
         // quedaria cheese: true, meat: false...
 
+        let orderSummary = <OrderSummary 
+                            price={this.state.totalPrice} ingredients={this.state.ingredients}
+                            purchaseCancelled={this.purchaseCancelHandler}
+                            purchaseContinued={this.purchaseContinueHandler}/>
+        if (this.state.loading){
+            orderSummary = <Spinner />;
+        }
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    <OrderSummary 
-                    price={this.state.totalPrice} ingredients={this.state.ingredients}
-                    purchaseCancelled={this.purchaseCancelHandler}
-                    purchaseContinued={this.purchaseContinueHandler}/>
+                    {orderSummary}
                 </Modal>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
@@ -114,4 +148,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
