@@ -91,31 +91,44 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         //alert('Continuaste');
-        this.setState({loading: true});
-        const order = {
-            ingredients: this.state.ingredients,
-            //En una app real el precio deberia calcularse en el server porque desde aca podria manipularlo el usuario
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Milena G',
-                address: {
-                    street: 'Test 123',
-                    zipCode: '1322',
-                    country: 'Argentina'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest'
+        // this.setState({loading: true});
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     //En una app real el precio deberia calcularse en el server porque desde aca podria manipularlo el usuario
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Milena G',
+        //         address: {
+        //             street: 'Test 123',
+        //             zipCode: '1322',
+        //             country: 'Argentina'
+        //         },
+        //         email: 'test@test.com'
+        //     },
+        //     deliveryMethod: 'fastest'
+        // }
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         console.log(response);
+        //         this.setState({ loading: false, purchasing: false });
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //         this.setState({ loading: false, purchasing: false });
+        //     });
+
+        //Pasar los ingredientes como query del URL
+        const queryParams = [];
+        queryParams.push('price='  + this.state.totalPrice);
+        for (let i in this.state.ingredients) {
+            //encodeURIComponent lo hace valido para usar en url, ej cambia los espacios
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
         }
-        axios.post('/orders.json', order)
-            .then(response => {
-                console.log(response);
-                this.setState({ loading: false, purchasing: false });
-            })
-            .catch(error => {
-                console.log(error);
-                this.setState({ loading: false, purchasing: false });
-            });
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
     }
     
     render(){
