@@ -3,13 +3,18 @@ import classes from './Input.module.scss';
 
 const input = (props) => {
     let inputElement = null;
+    const inputClasses = [classes.InputElement];
+
+    if(props.invalid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.Invalid);
+    }
 
     //Con el switch hace mas dinamico el componente, solo hay que poner el inputType correcto
     switch (props.elementType) {
         case ('input'):
             //al hacer spread de props se pueden pasar como props los mismos atributos que usaria el elemento. Ej. type="mail" para el input
             inputElement = <input 
-                className={classes.InputElement} 
+                className={inputClasses.join(" ")} 
                 {...props.elementConfig} 
                 value={props.value} 
                 onChange={props.changed}
@@ -18,7 +23,7 @@ const input = (props) => {
         case ('textarea'):
             //en react textarea is self closing
             inputElement = <textarea   
-                className={classes.InputElement}  
+                className={inputClasses.join(" ")}  
                 {...props.elementConfig} 
                 value={props.value} 
                 onChange={props.changed}
@@ -27,7 +32,7 @@ const input = (props) => {
         case ('select'):
             inputElement = (
                 <select   
-                    className={classes.InputElement}  
+                    className={inputClasses.join(" ")}  
                     value={props.value}
                     onChange={props.changed}
                 >
@@ -41,16 +46,23 @@ const input = (props) => {
             break;
         default:
             inputElement = <input  
-                className={classes.InputElement}  
+                className={inputClasses.join(" ")}  
                 {...props.elementConfig} 
                 value={props.value}  
                 onChange={props.changed}
             />
     }
+
+    let validationError = null;
+    if (props.invalid && props.touched) {
+        validationError = <p className={classes.ValidationError}>Please enter a valid value!</p>;
+    }
+ 
     return (
         <div className={classes.Input}>
             <label>{props.label}</label>
             {inputElement}
+            {validationError}
         </div>
     )
 }

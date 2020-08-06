@@ -19,4 +19,12 @@
             background-color: #ccc;
         }
     }
+    .Invalid {
+        border: 1px solid red;
+        background-color: rgb(255, 85, 85);
+    }
+    .ValidationError {
+        color: red;
+        margin: 5px 0;
+    } 
 }
