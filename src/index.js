@@ -3,16 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import burgerBuilder from './store/reducers/burgerBuilder';
+import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
+import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 
+// added redux devtools
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 const store = createStore(
-  burgerBuilder,
-  // added redux devtools
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+  burgerBuilderReducer, composeEnhancers(
+    applyMiddleware(thunk)
+));
 
 ReactDOM.render(
   // Hay que tener en cuenta ciertas cosas para que Provider y Browser Router funcionen bien juntos
