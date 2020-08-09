@@ -42,6 +42,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
     }
     
@@ -91,9 +92,9 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        price: state.totalPrice,
-        error: state.error
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error
     };
 }
 
@@ -101,9 +102,11 @@ const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
         onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName)),
-        onInitIngredients: () => dispatch (actionCreators.initIngredients())
+        onInitIngredients: () => dispatch (actionCreators.initIngredients()),
+        onInitPurchase: () => dispatch(actionCreators.purchaseBurgerInit())
     }
 }
+
 // no da problemas tener varios hocs, siempre que se pasen los props de uno a otro
 // No importa que el request a axios ocurre en otro lugar, se sigue podiendo manejar el error desde acá
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));

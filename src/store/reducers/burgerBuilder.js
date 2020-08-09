@@ -44,6 +44,7 @@ const reducer = (state = initialState, action) => {
                     cheese: action.ingredients.cheese,
                     meat: action.ingredients.meat
                 },
+                totalPrice: 50,
                 // se resetea el error por si acaso.
                 error: false
             };
