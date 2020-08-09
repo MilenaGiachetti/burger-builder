@@ -9,7 +9,8 @@ import axios from '../../axios-orders';
 import Spinner from '../../components/UI/Spinner/Spinner';
 //con minuscula porque no se usa con JSX
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-import actionTypes from '../../store/actions';
+// se puede omitir el index y se apuntará a este igual
+import * as actionCreators from '../../store/actions/index';
 
 
 
@@ -107,8 +108,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-        onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName})
+        onIngredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName))
     }
 }
 // no da problemas tener varios hocs, siempre que se pasen los props de uno a otro

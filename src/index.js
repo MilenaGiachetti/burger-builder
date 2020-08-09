@@ -4,11 +4,15 @@ import './index.scss';
 import App from './App';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import reducer from './store/reducer';
+import burgerBuilder from './store/reducers/burgerBuilder';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 
-const store = createStore(reducer);
+const store = createStore(
+  burgerBuilder,
+  // added redux devtools
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 ReactDOM.render(
   // Hay que tener en cuenta ciertas cosas para que Provider y Browser Router funcionen bien juntos
