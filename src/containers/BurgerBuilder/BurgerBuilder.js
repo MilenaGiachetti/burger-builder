@@ -16,20 +16,12 @@ import * as actionCreators from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     state = {
-        purchasing: false,
-        loading: false,
-        error: false
+        purchasing: false
     }
 
-    // componentDidMount () {
-    //     axios.get('/ingredients.json')
-    //         .then(response => {
-    //             this.setState({ingredients: response.data});
-    //         })
-    //         .catch(error => {
-    //             this.setState({error:true})
-    //         });
-    // }
+    componentDidMount () {
+        this.props.onInitIngredients();
+    }
     updatePurchaseState (ingredients) {
         const sum = Object.keys(ingredients)
             .map(igKey => {
@@ -62,7 +54,9 @@ class BurgerBuilder extends Component {
         }
         // quedaria cheese: true, meat: false...
         let orderSummary = null;
-        let burger = this.state.error ? <p>Ingredients cant be loaded</p> : <Spinner />;
+
+        let burger = this.props.error ? <p>Ingredients cant be loaded</p> : <Spinner />;
+        
         if(this.props.ings) {
             orderSummary = <OrderSummary 
                                 price={this.props.price} ingredients={this.props.ings}
@@ -84,10 +78,6 @@ class BurgerBuilder extends Component {
             );
         };
 
-        if (this.state.loading){
-            orderSummary = <Spinner />;
-        }
-
         return (
             <Aux>
                 <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
@@ -102,15 +92,18 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        price: state.totalPrice
+        price: state.totalPrice,
+        error: state.error
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (ingName) => dispatch(actionCreators.addIngredient(ingName)),
-        onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName))
+        onIngredientRemoved: (ingName) => dispatch(actionCreators.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch (actionCreators.initIngredients())
     }
 }
 // no da problemas tener varios hocs, siempre que se pasen los props de uno a otro
+// No importa que el request a axios ocurre en otro lugar, se sigue podiendo manejar el error desde acá
 export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(BurgerBuilder, axios));
