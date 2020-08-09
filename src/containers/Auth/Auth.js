@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import classes from './Auth.module.scss';
-
+import * as actionCreators from '../../store/actions/index';
 
 class Auth extends Component {
     state = {
-        orderForm: {
+        UserForm: {
             email: {
                 elementType: 'input',
                 elementConfig: {
@@ -70,24 +71,29 @@ class Auth extends Component {
     }
 
     inputChangedHandler = (event, inputIdentifier) => {
-        const updatedOrderForm = {
-            ...this.state.orderForm,
+        const updatedUserForm = {
+            ...this.state.UserForm,
             [inputIdentifier]: {
-                ...this.state.orderForm[inputIdentifier],
+                ...this.state.UserForm[inputIdentifier],
                 value: event.target.value,
-                valid: this.checkValidity(event.target.value, this.state.orderForm[inputIdentifier].validation),
+                valid: this.checkValidity(event.target.value, this.state.UserForm[inputIdentifier].validation),
                 touched: true
             }
         };
-        this.setState({orderForm: updatedOrderForm});
-    }
+        this.setState({UserForm: updatedUserForm});
+    };
+
+    submitHandler = (event) => {
+        event.preventDefault();
+        this.props.onAuth(this.state.UserForm.email.value, this.state.UserForm.password.value);
+    };
 
     render () {
         const formElementsArray = [];
-        for(let key in this.state.orderForm) {
+        for(let key in this.state.UserForm) {
             formElementsArray.push({
                 id: key,
-                config: this.state.orderForm[key]
+                config: this.state.UserForm[key]
             });
         };
 
@@ -105,7 +111,7 @@ class Auth extends Component {
         ))
         return (
             <div className={classes.Auth}>
-                <form>
+                <form onSubmit={this.submitHandler}>
                     {form}
                     <Button btnType="Success">Submit</Button>
                 </form>
@@ -114,4 +120,10 @@ class Auth extends Component {
     }
 };
 
-export default Auth;
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password) => dispatch(actionCreators.auth(email, password))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Auth);
