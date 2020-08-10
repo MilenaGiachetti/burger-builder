@@ -23,11 +23,11 @@ const purchaseBurgerStart = () => {
     }
 };
 
-export const purchaseBurger = (orderData) => {
+export const purchaseBurger = (orderData, token) => {
     return dispatch => {
         // se envuelve en dispatch para que se despache al store
         dispatch(purchaseBurgerStart());
-        axios.post('/orders.json', orderData)
+        axios.post('/orders.json?auth=' + token , orderData)
         .then(response => {
             dispatch(purchaseBurgerSuccess(response.data.name, orderData));
         })
@@ -63,10 +63,10 @@ const fetchOrdersStart = () => {
     }
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrdersStart());
-        axios.get('orders.json')
+        axios.get('orders.json?auth=' + token)
         .then(res => {
             // mejor cambiar esta data que se recibe acá que en el reducer. Format data cambiar acá, lógica en reducer.
             const fetchedOrders = [];
