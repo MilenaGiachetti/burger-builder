@@ -12,6 +12,7 @@ const actionTypes = {
     FETCH_ORDERS_FAIL: 'FETCH_ORDERS_FAIL',
     AUTH_START: 'AUTH_START',
     AUTH_SUCCESS: 'AUTH_SUCCESS',
-    AUTH_FAIL: 'AUTH_FAIL'
+    AUTH_FAIL: 'AUTH_FAIL',
+    AUTH_LOGOUT: 'AUTH_LOGOUT',
 };
 export default actionTypes;
