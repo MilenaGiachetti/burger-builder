@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+
+import classes from './Auth.module.scss';
+import * as actionCreators from '../../store/actions/index';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import classes from './Auth.module.scss';
-import * as actionCreators from '../../store/actions/index';
 
 class Auth extends Component {
     state = {
@@ -40,6 +42,12 @@ class Auth extends Component {
         },
         formIsValid: false,
         isSignUp: true
+    }
+
+    componentDidMount() {
+        if(this.props.building && this.props.authRedirectPath !== '/' ) {
+            this.props.onSetAuthRedirectPath('/')
+        }
     }
 
     checkValidity(value, rules) {
@@ -129,8 +137,15 @@ class Auth extends Component {
                 <p>{this.props.error.message}</p>
             )
         }
+
+        let authRedirect = null;
+        if(this.props.isAuth){
+            authRedirect = <Redirect to={this.props.authRedirectPath}/>;
+        } 
+
         return (
             <div className={classes.Auth}>
+                {authRedirect}
                 <h4>{this.state.isSignUp ? 'SIGNUP' : 'SIGNIN'}</h4>
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
@@ -147,14 +162,18 @@ class Auth extends Component {
 
 const mapStateToProps = state => {
     return {
+        isAuth: state.auth.token !== null,
         loading: state.auth.loading,
-        error: state.auth.error
+        error: state.auth.error,
+        building: state.burgerBuilder.building,
+        authRedirectPath: state.auth.authRedirectPath
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignUp) => dispatch(actionCreators.auth(email, password, isSignUp))
+        onAuth: (email, password, isSignUp) => dispatch(actionCreators.auth(email, password, isSignUp)),
+        onSetAuthRedirectPath: (path) => dispatch(actionCreators.setAuthRedirectPath(path))
     }
 }
 
