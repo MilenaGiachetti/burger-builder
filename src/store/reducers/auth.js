@@ -18,8 +18,7 @@ const authSuccess = (state, action) => {
         token: action.idToken,
         userId: action.userId,
         error: null,
-        loading: false,
-        authRedirectPath: '/'
+        loading: false
     })
 }
 
