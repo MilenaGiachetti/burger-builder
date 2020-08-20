@@ -63,11 +63,12 @@ const fetchOrdersStart = () => {
     }
 };
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
     return dispatch => {
         dispatch(fetchOrdersStart());
-        axios.get('orders.json?auth=' + token)
-        .then(res => {
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+        axios.get('orders.json' + queryParams)
+            .then(res => {
             // mejor cambiar esta data que se recibe acá que en el reducer. Format data cambiar acá, lógica en reducer.
             const fetchedOrders = [];
             for(let key in res.data) {
