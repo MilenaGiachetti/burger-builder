@@ -27,7 +27,7 @@ const addIngredient = (state, action) => {
 };
 
 const removeIngredient = (state, action) => {
-    const updatedIngredientRem = { [action.ingredientName]: state.ingredients[action.ingredientName] + 1 };
+    const updatedIngredientRem = { [action.ingredientName]: state.ingredients[action.ingredientName] - 1 };
     const updatedIngredientsRem = updateObject(state.ingredients, updatedIngredientRem);
     const updatedStateRem = {
         ingredients: updatedIngredientsRem,
