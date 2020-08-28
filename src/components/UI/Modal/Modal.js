@@ -19,10 +19,6 @@ const Modal = props => {
         </Aux>
     )        
 }
-    // shouldComponentUpdate (nextProps, nextState) {
-    //     return nextProps.show !== this.props.show || nextProps.children !== this.props.children;
-    // }
-
 
 export default React.memo(Modal, (prevProps, nextProps) => 
     nextProps.show === prevProps.show && 
