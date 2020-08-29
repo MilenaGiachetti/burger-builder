@@ -15,24 +15,24 @@ import { BrowserRouter } from 'react-router-dom';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const rootReducer = combineReducers({
-  burgerBuilder: burgerBuilderReducer,
-  order: orderReducer,
-  auth: authReducer
+	burgerBuilder: burgerBuilderReducer,
+	order: orderReducer,
+	auth: authReducer
 })
 
 const store = createStore(
-  rootReducer, composeEnhancers(
-    applyMiddleware(thunk)
+	rootReducer, composeEnhancers(
+		applyMiddleware(thunk)
 ));
 
 ReactDOM.render(
-  // Hay que tener en cuenta ciertas cosas para que Provider y Browser Router funcionen bien juntos
-  <Provider store={store}> 
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById('root')
+	// Hay que tener en cuenta ciertas cosas para que Provider y Browser Router funcionen bien juntos
+	<Provider store={store}> 
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</Provider>,
+	document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
