@@ -4,7 +4,6 @@ import './index.scss';
 import App from './App';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
 // importar saga middleware
 import createSagaMiddleware from 'redux-saga';
 
@@ -31,7 +30,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(
 	rootReducer, composeEnhancers(
 		// se agrega saga como middleware
-		applyMiddleware(thunk, sagaMiddleware)
+		applyMiddleware(sagaMiddleware)
 ));
 
 sagaMiddleware.run(watchAuth);
