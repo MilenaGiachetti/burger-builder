@@ -14,7 +14,7 @@ import authReducer from './store/reducers/auth';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 // importar saga a usar
-import { watchAuth } from './store/sagas/index';
+import { watchAuth, watchBurgerBuilder } from './store/sagas/index';
 
 // added redux devtools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -35,6 +35,7 @@ const store = createStore(
 ));
 
 sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(watchBurgerBuilder);
 
 ReactDOM.render(
 	// Hay que tener en cuenta ciertas cosas para que Provider y Browser Router funcionen bien juntos
