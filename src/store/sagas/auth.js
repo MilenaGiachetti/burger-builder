@@ -1,13 +1,13 @@
-import { put, delay } from 'redux-saga/effects';
+import { put, delay, call } from 'redux-saga/effects';
 import * as actionCreators from '../actions/index';
 import axios from 'axios';
 
 export function* logoutSaga(action) {
     // keyword yield hace que espere hasta que termine este paso antes de ejecutar el siguiente código.
     // estos yields en realidad no son necesarios porque es sincrónico
-    yield localStorage.removeItem('token');
-    yield localStorage.removeItem('userId');
-    yield localStorage.removeItem('expirationDate');
+    yield call([localStorage, 'removeItem'], 'token');
+    yield call([localStorage, 'removeItem'], 'userId');
+    yield call([localStorage, 'removeItem'], 'expirationDate');
     yield put(actionCreators.logoutSucceed());
 };
 
@@ -23,7 +23,7 @@ export function* authUserSaga(action) {
         password: action.password,
         returnSecureToken: true
     }
-    const apiKey = ""; //key
+    const apiKey = `${process.env.REACT_APP_API_KEY}`; //key
     let url = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + apiKey;
     if(!action.isSignUp) {
         url = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
