@@ -40,7 +40,7 @@ sagaMiddleware.run(watchOrder);
 ReactDOM.render(
 	// Hay que tener en cuenta ciertas cosas para que Provider y Browser Router funcionen bien juntos
 	<Provider store={store}> 
-		<BrowserRouter>
+		<BrowserRouter basename="burger-builder/">
 			<App />
 		</BrowserRouter>
 	</Provider>,
